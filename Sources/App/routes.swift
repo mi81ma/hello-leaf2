@@ -1,20 +1,39 @@
 import Vapor
 
-/// Register your application's routes here.
+struct  WelcomContext :Encodable {
+    var message :String
+}
+
+
+struct DisplayDishesContext :Encodable {
+    var dishes :[Dish]
+}
+
+
+/// Register your application&apos;s routes here.
 public func routes(_ router: Router) throws {
-    // Basic "It works" example
-    router.get { req in
-        return "It works!"
-    }
-    
-    // Basic "Hello, world!" example
-    router.get("hello") { req in
-        return "Hello, world!"
+
+    router.get("hello") { request in
+        return try request.view().render("index")
     }
 
-    // Example of configuring a controller
-    let todoController = TodoController()
-    router.get("todos", use: todoController.index)
-    router.post("todos", use: todoController.create)
-    router.delete("todos", Todo.parameter, use: todoController.delete)
+
+    router.get("display-dishes") { request -> Future<View> in
+
+        let dishes = [Dish(name: "Cheese Cake"), Dish(name: "Meat Balls"), Dish(name: "Chiken Tenders")]
+
+        let context = DisplayDishesContext(dishes: dishes)
+
+        return try request.view().render("display-dishes", context)
+
+    }
+
+    
+
+    router.get("welcome") { request -> Future<View> in
+
+        let context = WelcomContext(message: "Welcome to Leaf Templates")
+
+        return try request.view().render("index", context)
+    }
 }

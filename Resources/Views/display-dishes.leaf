@@ -1,0 +1,15 @@
+
+<html>
+<head></head>
+
+<body>
+<h3>Dishes</h3>
+
+#for(dish in dishes) {
+
+<p>#(dish.name)</p>
+
+}
+
+</body>
+</html>
